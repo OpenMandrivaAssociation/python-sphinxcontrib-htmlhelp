@@ -1,42 +1,38 @@
-%define	module	sphinxcontrib-htmlhelp
+%define module sphinxcontrib-htmlhelp
 
 Summary:	HTML help file support for the Sphinx documentation generator
 Name:		python-%{module}
-Version:	1.0.3
-Release:	2
-Source0:	https://github.com/sphinx-doc/%{module}/archive/%{version}.tar.gz
+Version:	2.0.0
+Release:	1
+Source0:	https://github.com/sphinx-doc/%{module}/archive/%{module}-%{version}.tar.gz
 License:	ISC
 Group:		Development/Python
 Url:		http://sphinx-doc.org/
 BuildArch:	noarch
-BuildRequires:	pkgconfig(python2)
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	python-setuptools
-BuildRequires:	python2-setuptools
+Obsoletes:	python2-%{module} < 2.0.0
 
 %description
-HTML help file support for the Sphinx documentation generator
-
-%package -n python2-%{module}
-Summary:	HTML help file support for the Sphinx documentation generator
-Group:		Development/Python
-
-%description -n python2-%{module}
-HTML help file support for the Sphinx documentation generator
+HTML help file support for the Sphinx documentation generator.
 
 %prep
-%setup -qc
-cp -a %{module}-%{version} py2
+%autosetup -n %{module}-%{version}
+
+# drop bundled egg-info
+rm -rf *.egg-info/
+
+find -name '*.mo' -delete
+
+%build
+%py3_build
 
 %install
-cd py2
-PYTHONDONTWRITEBYTECODE=1 %__python2 setup.py install --root=%{buildroot}
-
-cd ../%{module}-%{version}
-PYTHONDONTWRITEBYTECODE=1 %__python setup.py install --root=%{buildroot}
+%py3_install
 
 %files
-%{py_puresitedir}/sphinxcontrib*
-
-%files -n python2-%{module}
-%{py2_puresitedir}/sphinxcontrib*
+%license LICENSE
+%doc README.rst
+%{python_sitelib}/sphinxcontrib/
+%{python_sitelib}/sphinxcontrib_htmlhelp-%{version}-py%{python3_version}-*.pth
+%{python_sitelib}/sphinxcontrib_htmlhelp-%{version}-py%{python3_version}.egg-info/
