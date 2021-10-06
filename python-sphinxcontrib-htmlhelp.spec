@@ -9,6 +9,7 @@ License:	ISC
 Group:		Development/Python
 Url:		http://sphinx-doc.org/
 BuildArch:	noarch
+BuildRequires:	gettext
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	python-setuptools
 Obsoletes:	python2-%{module} < 2.0.0
@@ -25,12 +26,29 @@ rm -rf *.egg-info/
 find -name '*.mo' -delete
 
 %build
+for po in $(find -name '*.po'); do
+  msgfmt --output-file=${po%.po}.mo ${po}
+done
 %py3_build
 
 %install
 %py3_install
 
-%files
+# Move language files to /usr/share
+pushd %{buildroot}%{python_sitelib}
+for lang in $(find sphinxcontrib/htmlhelp/locales -maxdepth 1 -mindepth 1 -type d -not -path '*/\.*' -printf "%f ");
+do
+  test $lang == __pycache__ && continue
+  install -d %{buildroot}%{_datadir}/locale/$lang/LC_MESSAGES
+  mv sphinxcontrib/htmlhelp/locales/$lang/LC_MESSAGES/*.mo %{buildroot}%{_datadir}/locale/$lang/LC_MESSAGES/
+done
+rm -rf sphinxcontrib/htmlhelp/locales
+ln -s %{_datadir}/locale sphinxcontrib/htmlhelp/locales
+popd
+
+%find_lang sphinxcontrib.htmlhelp
+
+%files -f sphinxcontrib.htmlhelp.lang
 %license LICENSE
 %doc README.rst
 %{python_sitelib}/sphinxcontrib/
