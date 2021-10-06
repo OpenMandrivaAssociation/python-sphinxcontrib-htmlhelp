@@ -35,7 +35,7 @@ done
 %py3_install
 
 # Move language files to /usr/share
-pushd %{buildroot}%{python_sitelib}
+cd %{buildroot}%{python_sitelib}
 for lang in $(find sphinxcontrib/htmlhelp/locales -maxdepth 1 -mindepth 1 -type d -not -path '*/\.*' -printf "%f ");
 do
   test $lang == __pycache__ && continue
@@ -44,7 +44,7 @@ do
 done
 rm -rf sphinxcontrib/htmlhelp/locales
 ln -s %{_datadir}/locale sphinxcontrib/htmlhelp/locales
-popd
+cd -
 
 %find_lang sphinxcontrib.htmlhelp
 
@@ -52,5 +52,5 @@ popd
 %license LICENSE
 %doc README.rst
 %{python_sitelib}/sphinxcontrib/
-%{python_sitelib}/sphinxcontrib_htmlhelp-%{version}-py%{python3_version}-*.pth
-%{python_sitelib}/sphinxcontrib_htmlhelp-%{version}-py%{python3_version}.egg-info/
+%{python_sitelib}/sphinxcontrib_*-py%{python_version}.egg-info
+%{python_sitelib}/sphinxcontrib_*-py%{python_version}-nspkg.pth
