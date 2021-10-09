@@ -3,14 +3,14 @@
 Summary:	HTML help file support for the Sphinx documentation generator
 Name:		python-%{module}
 Version:	2.0.0
-Release:	1
-Source0:	https://github.com/sphinx-doc/%{module}/archive/%{module}-%{version}.tar.gz
+Release:	2
+Source0:	https://files.pythonhosted.org/packages/source/s/%{module}/%{module}-%{version}.tar.gz
 License:	ISC
 Group:		Development/Python
 Url:		http://sphinx-doc.org/
 BuildArch:	noarch
 BuildRequires:	gettext
-BuildRequires:	pkgconfig(python3)
+BuildRequires:	pkgconfig(python)
 BuildRequires:	python-setuptools
 Obsoletes:	python2-%{module} < 2.0.0
 
@@ -20,19 +20,16 @@ HTML help file support for the Sphinx documentation generator.
 %prep
 %autosetup -n %{module}-%{version}
 
-# drop bundled egg-info
-rm -rf *.egg-info/
-
 find -name '*.mo' -delete
 
 %build
 for po in $(find -name '*.po'); do
   msgfmt --output-file=${po%.po}.mo ${po}
 done
-%py3_build
+%py_build
 
 %install
-%py3_install
+%py_install
 
 # Move language files to /usr/share
 cd %{buildroot}%{python_sitelib}
@@ -51,6 +48,7 @@ cd -
 %files -f sphinxcontrib.htmlhelp.lang
 %license LICENSE
 %doc README.rst
-%{python_sitelib}/sphinxcontrib/
+%{python_sitelib}/sphinxcontrib_*-py%{python_version}.egg-info/PKG-INFO
 %{python_sitelib}/sphinxcontrib_*-py%{python_version}.egg-info
+%{python_sitelib}/sphinxcontrib/
 %{python_sitelib}/sphinxcontrib_*-py%{python_version}-nspkg.pth
