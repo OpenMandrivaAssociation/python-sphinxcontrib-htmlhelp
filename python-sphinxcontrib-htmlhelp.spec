@@ -20,19 +20,16 @@ HTML help file support for the Sphinx documentation generator.
 %prep
 %autosetup -n %{module}-%{version}
 
-# drop bundled egg-info
-rm -rf *.egg-info/
-
 find -name '*.mo' -delete
 
 %build
 for po in $(find -name '*.po'); do
   msgfmt --output-file=${po%.po}.mo ${po}
 done
-%py3_build
+%py_build
 
 %install
-%py3_install
+%py_install
 
 # Move language files to /usr/share
 cd %{buildroot}%{python_sitelib}
