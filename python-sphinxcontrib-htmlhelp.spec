@@ -2,24 +2,23 @@
 
 Summary:	HTML help file support for the Sphinx documentation generator
 Name:		python-%{module}
-Version:	2.0.0
-Release:	4
-Source0:	https://files.pythonhosted.org/packages/source/s/%{module}/%{module}-%{version}.tar.gz
+Version:	2.1.0
+Release:	1
+Source0:	https://files.pythonhosted.org/packages/source/s/%{module}/sphinxcontrib_htmlhelp-%{version}.tar.gz
 License:	ISC
 Group:		Development/Python
 Url:		http://sphinx-doc.org/
 BuildArch:	noarch
 BuildRequires:	gettext
-BuildRequires:	pkgconfig(python)
-BuildRequires:	python-setuptools
+BuildRequires:	python
+BuildRequires:	python%{pyver}dist(pip)
 Obsoletes:	python2-%{module} < 2.0.0
 
 %description
 HTML help file support for the Sphinx documentation generator.
 
 %prep
-%autosetup -n %{module}-%{version}
-
+%autosetup -n sphinxcontrib_htmlhelp-%{version}
 find -name '*.mo' -delete
 
 %build
@@ -46,8 +45,6 @@ cd -
 %find_lang sphinxcontrib.htmlhelp
 
 %files -f sphinxcontrib.htmlhelp.lang
-%license LICENSE
 %doc README.rst
 %{python_sitelib}/sphinxcontrib/
-%{python_sitelib}/sphinxcontrib_*-py*-nspkg.pth
-%{python_sitelib}/sphinxcontrib_*-py*.egg-info
+%{python_sitelib}/sphinxcontrib_htmlhelp-%{version}.dist-info
