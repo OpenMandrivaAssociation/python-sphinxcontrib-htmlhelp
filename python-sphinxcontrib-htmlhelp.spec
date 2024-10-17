@@ -7,7 +7,7 @@ Release:	1
 Source0:	https://files.pythonhosted.org/packages/source/s/%{module}/sphinxcontrib_htmlhelp-%{version}.tar.gz
 License:	ISC
 Group:		Development/Python
-Url:		http://sphinx-doc.org/
+Url:		https://sphinx-doc.org/
 BuildArch:	noarch
 BuildRequires:	gettext
 BuildRequires:	python
