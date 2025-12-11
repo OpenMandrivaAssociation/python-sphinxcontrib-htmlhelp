@@ -3,33 +3,30 @@
 Summary:	HTML help file support for the Sphinx documentation generator
 Name:		python-%{module}
 Version:	2.1.0
-Release:	1
+Release:	2
 Source0:	https://files.pythonhosted.org/packages/source/s/%{module}/sphinxcontrib_htmlhelp-%{version}.tar.gz
 License:	ISC
 Group:		Development/Python
 Url:		https://sphinx-doc.org/
 BuildArch:	noarch
-BuildRequires:	gettext
+BuildSystem:	python
 BuildRequires:	python
+BuildRequires:	gettext
 BuildRequires:	python%{pyver}dist(pip)
 Obsoletes:	python2-%{module} < 2.0.0
 
 %description
 HTML help file support for the Sphinx documentation generator.
 
-%prep
-%autosetup -n sphinxcontrib_htmlhelp-%{version}
+%prep -a
 find -name '*.mo' -delete
 
-%build
+%build -p
 for po in $(find -name '*.po'); do
   msgfmt --output-file=${po%.po}.mo ${po}
 done
-%py_build
 
-%install
-%py_install
-
+%install -a
 # Move language files to /usr/share
 cd %{buildroot}%{python_sitelib}
 for lang in $(find sphinxcontrib/htmlhelp/locales -maxdepth 1 -mindepth 1 -type d -not -path '*/\.*' -printf "%f ");
